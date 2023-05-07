@@ -67,10 +67,10 @@ public class MyBookService {
         myBookRepository.deleteById(id);
     }
 
-    public void checkAccessPermission(Long userBookId, String username){
-        MyBook myBook = myBookRepository.findById(userBookId).orElseThrow(() -> new BookNotFoundException("책을 찾을 수 없습니다."));
+    public void checkAccessPermission(Long myBookId, Long userId){
+        MyBook myBook = myBookRepository.findById(myBookId).orElseThrow(() -> new BookNotFoundException("책을 찾을 수 없습니다."));
         if(!myBook.isOpen()){
-            User user = userRepository.findByEmail(username).orElseThrow(UserNotFoundException::new);
+            User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
             if(myBook.getUser() != user){
                 throw new UnAuthorizedAccess("접근 권한이 없습니다.");
             }

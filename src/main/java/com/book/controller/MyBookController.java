@@ -1,6 +1,7 @@
 package com.book.controller;
 
-import com.book.config.auth.PrincipalDetails;
+import com.book.config.interceptor.Auth;
+import com.book.config.security.jwt.LoginUser;
 import com.book.domain.MyBook.MyBook;
 import com.book.domain.MyBook.dto.request.MyBookCreateDto;
 import com.book.domain.MyBook.dto.request.MyBookUpdateDto;
@@ -8,7 +9,6 @@ import com.book.domain.MyBook.dto.response.MyBookResDto;
 import com.book.service.MyBookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,17 +21,19 @@ public class MyBookController {
 
     private final MyBookService myBookService;
 
+    @Auth
     @PostMapping("/create")
-    public ResponseEntity<Void> createMyBook(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                              @RequestBody MyBookCreateDto myBookDto) {
-        myBookService.createMyBook(userDetails.getUser().getId(), myBookDto);
+    public ResponseEntity<Void> createMyBook(@LoginUser Long userId,
+                                             @RequestBody MyBookCreateDto myBookDto) {
+        myBookService.createMyBook(userId, myBookDto);
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @GetMapping("/detail")
-    public ResponseEntity<MyBookResDto> getMyBook(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                              @RequestParam(name = "mybookid") Long id){
-        myBookService.checkAccessPermission(id, userDetails.getUsername());
+    public ResponseEntity<MyBookResDto> getMyBook(@LoginUser Long userId,
+                                                  @RequestParam(name = "mybookid") Long id){
+        myBookService.checkAccessPermission(id,userId);
         return ResponseEntity.ok(myBookService.getMyBook(id).toResDto());
     }
 
@@ -42,22 +44,24 @@ public class MyBookController {
         return ResponseEntity.ok(userBookList);
     }
 
+    @Auth
     @PostMapping("/update/{id}")
-    public ResponseEntity<Void> update(@AuthenticationPrincipal PrincipalDetails userDetails,
+    public ResponseEntity<Void> update(@LoginUser Long userId,
                                        @RequestBody MyBookUpdateDto myBookDto,
                                        @PathVariable("id") Long id){
 
-        myBookService.checkAccessPermission(id, userDetails.getUsername());
+        myBookService.checkAccessPermission(id, userId);
         myBookService.updateMyBook(id, myBookDto);
 
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> delete(@AuthenticationPrincipal PrincipalDetails userDetails,
-                       @RequestParam Long id){
+    public ResponseEntity<Void> delete(@LoginUser Long userId,
+                                       @RequestParam Long id){
 
-        myBookService.checkAccessPermission(id, userDetails.getUsername());
+        myBookService.checkAccessPermission(id, userId);
         myBookService.deleteMyBooks(id);
 
         return ResponseEntity.ok().build();

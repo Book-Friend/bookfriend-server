@@ -1,14 +1,10 @@
 package com.book.controller;
 
-import com.book.config.auth.PrincipalDetails;
 import com.book.domain.recommend.Recommend;
 import com.book.domain.recommend.dto.response.RecommendResDto;
-import com.book.domain.user.dto.response.HomeResDto;
-import com.book.service.NoticeService;
 import com.book.service.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;

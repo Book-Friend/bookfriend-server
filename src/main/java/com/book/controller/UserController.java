@@ -1,6 +1,7 @@
 package com.book.controller;
 
-import com.book.config.auth.PrincipalDetails;
+import com.book.config.interceptor.Auth;
+import com.book.config.security.jwt.LoginUser;
 import com.book.domain.user.User;
 import com.book.domain.user.dto.request.PasswordChangeDto;
 import com.book.domain.user.dto.request.UserUpdateDto;
@@ -8,7 +9,6 @@ import com.book.service.ImageService;
 import com.book.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,34 +21,35 @@ public class UserController {
     private final UserService userService;
     private final ImageService imageService;
 
+    @Auth
     @PostMapping("/password")
-    public ResponseEntity<Void> changePassword(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                               @RequestBody PasswordChangeDto password) {
-        userService.updatePassword(userDetails.getUser().getId(), password);
+    public ResponseEntity<Void> changePassword(@LoginUser Long userId, @RequestBody PasswordChangeDto password) {
+        userService.updatePassword(userId, password);
 
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @PostMapping("/update")
-    public ResponseEntity<Void> changeName(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                           @RequestBody UserUpdateDto updateDto) {
-        userService.updateProfile(userDetails.getUser().getId(), updateDto);
+    public ResponseEntity<Void> changeName(@LoginUser Long userId, @RequestBody UserUpdateDto updateDto) {
+        userService.updateProfile(userId, updateDto);
 
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @PostMapping("/update/image")
-    public ResponseEntity<Void> changeImage(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                            @RequestPart MultipartFile multipartFile) {
-        User user = userService.findUser(userDetails.getUser().getId());
+    public ResponseEntity<Void> changeImage(@LoginUser Long userId, @RequestPart MultipartFile multipartFile) {
+        User user = userService.findUser(userId);
         imageService.updateImage(user, multipartFile);
 
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @DeleteMapping("/withdraw")
-    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal PrincipalDetails userDetails) {
-        userService.deleteUser(userDetails.getUser());
+    public ResponseEntity<Void> deleteUser(@LoginUser Long userId) {
+        userService.deleteUser(userId);
 
         return ResponseEntity.ok().build();
     }

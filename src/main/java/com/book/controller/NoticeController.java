@@ -1,9 +1,12 @@
 package com.book.controller;
 
-import com.book.config.auth.PrincipalDetails;
+import com.book.config.interceptor.Auth;
+import com.book.config.security.jwt.LoginUser;
 import com.book.domain.alarm.Notice;
 import com.book.domain.alarm.dto.response.NoticeResDto;
+import com.book.domain.user.User;
 import com.book.service.NoticeService;
+import com.book.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,11 +20,14 @@ import java.util.List;
 @RequestMapping("/notice")
 public class NoticeController {
 
+    private final UserService userService;
     private final NoticeService noticeService;
 
+    @Auth
     @GetMapping
-    public ResponseEntity<List<NoticeResDto>> getNotice(@AuthenticationPrincipal PrincipalDetails userDetails){
-        List<Notice> notices = noticeService.getNotice(userDetails.getUser(), false);
+    public ResponseEntity<List<NoticeResDto>> getNotice(@LoginUser Long userId){
+        User user = userService.findUser(userId);
+        List<Notice> notices = noticeService.getNotice(user, false);
         List<NoticeResDto> noticeResponse = new ArrayList<>();
         for (Notice notice : notices) {
             noticeResponse.add(notice.toResDto());
@@ -30,9 +36,11 @@ public class NoticeController {
         return ResponseEntity.ok(noticeResponse);
     }
 
+    @Auth
     @GetMapping("/old")
-    public ResponseEntity<List<NoticeResDto>> getOldNotice(@AuthenticationPrincipal PrincipalDetails userDetails){
-        List<Notice> notices = noticeService.getNotice(userDetails.getUser(), true);
+    public ResponseEntity<List<NoticeResDto>> getOldNotice(@LoginUser Long userId){
+        User user = userService.findUser(userId);
+        List<Notice> notices = noticeService.getNotice(user, true);
         List<NoticeResDto> noticeResponse = new ArrayList<>();
         for (Notice notice : notices) {
             noticeResponse.add(notice.toResDto());
@@ -40,11 +48,12 @@ public class NoticeController {
         return ResponseEntity.ok(noticeResponse);
     }
 
-
+    @Auth
     @DeleteMapping
-    public ResponseEntity<Void> deleteNotice(@AuthenticationPrincipal PrincipalDetails userDetails,
+    public ResponseEntity<Void> deleteNotice(@LoginUser Long userId,
                                              @RequestParam("id") Long id) {
-        noticeService.deleteNotice(userDetails.getUser(), id);
+        User user = userService.findUser(userId);
+        noticeService.deleteNotice(user, id);
         return ResponseEntity.ok().build();
     }
 }

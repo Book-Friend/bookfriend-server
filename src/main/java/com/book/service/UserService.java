@@ -2,6 +2,7 @@ package com.book.service;
 
 import com.book.domain.recommend.Recommend;
 import com.book.domain.user.*;
+import com.book.domain.user.dto.request.LoginDto;
 import com.book.domain.user.dto.request.PasswordChangeDto;
 import com.book.domain.user.dto.request.UserCreateDto;
 import com.book.domain.user.dto.request.UserUpdateDto;
@@ -37,6 +38,17 @@ public class UserService {
         return user;
     }
 
+    @Transactional(readOnly = true)
+    public Long login(LoginDto loginDto){
+        User userInfo = getUserInfo(loginDto.getUsername());
+        String password = loginDto.getPassword();
+        System.out.println("password + userInfo.getPassword() = " + password + userInfo.getPassword());
+        if(!encoder.matches(password, userInfo.getPassword())){
+            throw new PasswordException("아이디 또는 비밀번호가 잘못되었습니다.");
+        }
+        return userInfo.getId();
+    }
+
     public void checkDuplicateUser(String email){
         userRepository.findByEmail(email).ifPresent(param -> {
             throw new DuplicateEmailException("중복된 이메일입니다.");
@@ -44,7 +56,7 @@ public class UserService {
     }
 
     public User getUserInfo(String email){
-        return userRepository.findByEmail(email).get();
+        return userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
     }
 
     public ProfileResDto getUserProfile(Long id){
@@ -70,12 +82,12 @@ public class UserService {
 
 
     @Transactional
-    public void deleteUser(User user){
-        List<Recommend> recommendList = recommendService.getRecommendList(user.getId());
+    public void deleteUser(Long userId){
+        List<Recommend> recommendList = recommendService.getRecommendList(userId);
         for(Recommend recommend : recommendList){
             tagService.deleteTag(recommend);
         }
-        userRepository.deleteById(user.getId());
+        userRepository.deleteById(userId);
     }
 
     @Transactional

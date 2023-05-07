@@ -6,6 +6,11 @@ naver:
 secret:
   key: ttbunwnsgk12822351001
 
+jwt:
+  key: d25zZ2t3bnNna3duc2drd25zZ2t3bnNna3duc2drd25zZ2t3bnNna3duc2drd25zZ2t3bnNna3duc2drd25zZ2t3bnNna3duc2dr
+
+
+
 upload:
   path: C:/Users/Junha/Desktop/Junha/Computer/upload/
 

@@ -84,9 +84,9 @@ public class RecommendService {
                 .build();
     }
 
-    public Recommend checkAccessPermission(Long id, String email){
+    public Recommend checkAccessPermission(Long id, Long userId){
         Recommend recommend = recommendRepository.findById(id).orElseThrow(() -> new BookNotFoundException("존재하지 않습니다."));
-        if (!recommend.getUser().getEmail().equals(email)){
+        if (!(recommend.getUser().getId()==userId)){
             throw new UnAuthorizedAccess("접근 권한이 없습니다.");
         }
         return recommend;

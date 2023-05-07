@@ -1,6 +1,7 @@
 package com.book.controller;
 
-import com.book.config.auth.PrincipalDetails;
+import com.book.config.interceptor.Auth;
+import com.book.config.security.jwt.LoginUser;
 import com.book.domain.recommend.Recommend;
 import com.book.domain.recommend.dto.request.RecommendCreate;
 import com.book.domain.recommend.dto.request.RecommendUpdate;
@@ -10,10 +11,7 @@ import com.book.service.RecommendService;
 import com.book.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,27 +27,28 @@ public class RecommendController {
         return ResponseEntity.ok(recommendService.getRecommendRes(recommend));
     }
 
-
+    @Auth
     @PostMapping("/create")
-    public ResponseEntity<Void> createRecommend(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                                @RequestBody RecommendCreate recommend){
-        User user = userService.getUserInfo(userDetails.getUsername());
+    public ResponseEntity<Void> createRecommend(@LoginUser Long userId, @RequestBody RecommendCreate recommend){
+        User user = userService.findUser(userId);
         recommendService.createRecommend(user, recommend);
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @PostMapping("/update/{id}")
-    public ResponseEntity<Void> updateRecommend(@AuthenticationPrincipal PrincipalDetails userDetails,
+    public ResponseEntity<Void> updateRecommend(@LoginUser Long userId,
                                                 @PathVariable Long id,
                                                 @RequestBody RecommendUpdate update){
-        Recommend recommend = recommendService.checkAccessPermission(id, userDetails.getUsername());
+        Recommend recommend = recommendService.checkAccessPermission(id, userId);
         recommendService.updateRecommend(update, recommend);
         return ResponseEntity.ok().build();
     }
 
+    @Auth
     @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteRecommend(@AuthenticationPrincipal PrincipalDetails userDetails,
-                                                @RequestParam Long id){
+    public ResponseEntity<Void> deleteRecommend(@LoginUser Long userId, @RequestParam Long id){
+        Recommend recommend = recommendService.checkAccessPermission(id, userId);
         recommendService.deleteRecommend(id);
         return ResponseEntity.ok().build();
     }

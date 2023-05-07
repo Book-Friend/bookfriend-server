@@ -37,11 +37,11 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login1(@RequestBody LoginDto loginDto) {
-        String token = jwtTokenProvider.createToken(loginDto.getUsername());
+    public ResponseEntity<JwtResponse> login1(@RequestBody LoginDto loginDto) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer "+ token);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+        Long userId = userService.login(loginDto);
+        JwtResponse token = jwtTokenProvider.createToken(userId);
+
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 }
