@@ -1,5 +1,6 @@
 package com.book.service;
 
+import com.book.config.security.jwt.JwtTokenProvider;
 import com.book.domain.recommend.Recommend;
 import com.book.domain.user.*;
 import com.book.domain.user.dto.request.LoginDto;
@@ -27,6 +28,7 @@ public class UserService {
     private final BCryptPasswordEncoder encoder;
     private final TagService tagService;
     private final RecommendService recommendService;
+    private final JwtTokenProvider tokenProvider;
 
 
     @Transactional
@@ -47,6 +49,11 @@ public class UserService {
             throw new PasswordException("아이디 또는 비밀번호가 잘못되었습니다.");
         }
         return userInfo.getId();
+    }
+
+    @Transactional
+    public void logout(Long userId){
+        tokenProvider.deleteToken(userId);
     }
 
     public void checkDuplicateUser(String email){

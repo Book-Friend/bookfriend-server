@@ -1,7 +1,5 @@
 package com.book.config.security.jwt;
 
-import com.book.config.interceptor.Auth;
-import com.book.exception.book.UnAuthorizedAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;

@@ -1,7 +1,10 @@
 package com.book.controller;
 
+import com.book.config.interceptor.Auth;
 import com.book.config.security.jwt.JwtResponse;
 import com.book.config.security.jwt.JwtTokenProvider;
+import com.book.config.security.jwt.LoginUser;
+import com.book.config.security.jwt.RefreshTokenReq;
 import com.book.domain.user.dto.request.LoginDto;
 import com.book.domain.user.dto.request.UserCreateDto;
 import com.book.service.UserService;
@@ -22,7 +25,7 @@ import javax.validation.Valid;
 public class LoginController {
 
      private final UserService userService;
-     private final JwtTokenProvider jwtTokenProvider;
+     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signUp(
@@ -36,12 +39,29 @@ public class LoginController {
         return ResponseEntity.ok().body(new LoginDto());
     }
 
+    //로그인
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login1(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtResponse> loginProcess(@RequestBody LoginDto loginDto) {
 
         Long userId = userService.login(loginDto);
-        JwtResponse token = jwtTokenProvider.createToken(userId);
+        String accessToken = tokenProvider.createAccessToken(userId);
+        String refreshToken = tokenProvider.createRefreshToken(userId);
 
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(new JwtResponse(accessToken, refreshToken), HttpStatus.OK);
+    }
+
+    //로그아웃
+    @Auth
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(@LoginUser Long userId){
+        userService.logout(userId);
+        return ResponseEntity.ok().build();
+    }
+
+    //엑세스 토큰 재발급
+    @PostMapping("/refresh")
+    public ResponseEntity<JwtResponse> refresh(@RequestBody RefreshTokenReq tokenReq){
+        JwtResponse jwtResponse = tokenProvider.reissueToken(tokenReq.getRefreshToken());
+        return ResponseEntity.ok().body(jwtResponse);
     }
 }

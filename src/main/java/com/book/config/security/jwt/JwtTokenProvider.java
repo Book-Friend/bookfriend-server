@@ -1,5 +1,7 @@
 package com.book.config.security.jwt;
 
+import com.book.exception.book.UnAuthorizedAccess;
+import com.book.service.RedisService;
 import io.jsonwebtoken.*;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
+import java.time.Duration;
 import java.util.Date;
 
 
@@ -24,14 +27,15 @@ public class JwtTokenProvider {
 
 
     private final Key secretKey;
+    private final RedisService redisService;
 
-    public JwtTokenProvider(@Value("${jwt.key}") String key) {
+    public JwtTokenProvider(@Value("${jwt.key}") String key, RedisService redisService) {
         byte[] keyBytes = Decoders.BASE64.decode(key);
         this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        this.redisService = redisService;
     }
 
-    //JWT 토큰 생성
-    public JwtResponse createToken(Long userId){
+    public String createAccessToken(Long userId){
         Date now = new Date();
         String accessToken = Jwts.builder()
                 .claim("userId", userId)
@@ -39,15 +43,22 @@ public class JwtTokenProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
 
+        return accessToken;
+    }
+
+    public String createRefreshToken(Long userId){
+        Date now = new Date();
         String refreshToken = Jwts.builder()
                 .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
+        redisService.setValues("refresh:" + String.valueOf(userId), refreshToken, Duration.ofMillis(refreshTokenValidTime));
 
-        return new JwtResponse(accessToken, refreshToken);
+        return refreshToken;
     }
 
-    public String getJwt(HttpServletRequest request){
+
+    public String getAccessToken(HttpServletRequest request){
         String token = request.getHeader("Authorization");
         return token.substring(7);
     }
@@ -64,24 +75,37 @@ public class JwtTokenProvider {
         return parseJwt(token).get("userId", Long.class);
     }
 
+    public JwtResponse reissueToken(String refreshToken){
+        if(!validateToken(refreshToken)){
+            throw new UnAuthorizedAccess("리프레시 토큰이 유효하지 않습니다.");
+        }
+
+        Long userId = getUserId(refreshToken);
+        if(!redisService.getValues("refresh:" + String.valueOf(userId)).equals(refreshToken)){
+            throw new UnAuthorizedAccess("리프레시 토큰이 유효하지 않습니다.");
+        }
+        return new JwtResponse(createAccessToken(userId), createRefreshToken(userId));
+    }
+
+    public void deleteToken(Long userId){
+        redisService.deleteValues("refresh:" + String.valueOf(userId));
+    }
+
+//    public void invalidateAccessToken(String accessToken){
+//        Date expiration = parseJwt(accessToken).getExpiration();
+//        Long now = new Date().getTime();
+//        Long remainTime = expiration.getTime() - now;
+//
+//        redisService.setValues("access:"+String.valueOf(getUserId(accessToken)), "logout",  Duration.ofMillis(remainTime));
+//    }
+
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String token) {
-//        try {
-//            return !parseJwt(token).getExpiration().before(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
         try {
             Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
             return true;
-        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("Invalid JWT Token", e);
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT Token", e);
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT Token", e);
-        } catch (IllegalArgumentException e) {
-            log.info("JWT claims string is empty.", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return false;
     }

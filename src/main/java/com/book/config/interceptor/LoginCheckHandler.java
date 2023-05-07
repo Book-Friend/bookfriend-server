@@ -14,7 +14,7 @@ public class LoginCheckHandler {
     private final JwtTokenProvider tokenProvider;
 
     public Long getUserId(HttpServletRequest request){
-        String token = tokenProvider.getJwt(request);
+        String token = tokenProvider.getAccessToken(request);
         if (token != null && tokenProvider.validateToken(token)) {
             Long userId = tokenProvider.getUserId(token);
             if(userId != null){
