@@ -1,6 +1,7 @@
 package com.book.service;
 
 import com.book.repository.user.UserRepository;
+import com.book.service.book.BookSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;

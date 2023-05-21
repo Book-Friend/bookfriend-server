@@ -1,8 +1,8 @@
 package com.book.controller;
 
 import com.book.domain.recommend.Recommend;
-import com.book.domain.recommend.dto.response.RecommendResDto;
-import com.book.service.RecommendService;
+import com.book.service.recommend.dto.response.RecommendResDto;
+import com.book.service.recommend.RecommendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

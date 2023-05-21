@@ -1,8 +1,8 @@
 package com.book.controller;
 
-import com.book.domain.recommend.dto.response.RecommendResDto;
-import com.book.domain.recommend.dto.response.RecommendSearchDto;
-import com.book.domain.user.dto.response.UserSearchDto;
+import com.book.service.recommend.dto.response.RecommendResDto;
+import com.book.service.recommend.dto.response.RecommendSearchDto;
+import com.book.service.user.dto.response.UserSearchDto;
 import com.book.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

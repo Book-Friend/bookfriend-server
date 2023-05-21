@@ -1,6 +1,6 @@
 package com.book.domain.alarm;
 
-import com.book.domain.alarm.dto.response.NoticeResDto;
+import com.book.service.notice.dto.response.NoticeResDto;
 import com.book.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

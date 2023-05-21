@@ -1,6 +1,6 @@
 package com.book.controller;
 
-import com.book.service.ImageService;
+import com.book.utils.ImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;

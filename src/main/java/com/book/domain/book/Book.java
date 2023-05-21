@@ -1,7 +1,7 @@
 package com.book.domain.book;
 
 import com.book.domain.MyBook.MyBook;
-import com.book.domain.book.dto.response.BookResDto;
+import com.book.service.book.dto.response.BookResDto;
 import com.book.domain.recommend.Recommend;
 import lombok.*;
 

@@ -1,16 +1,15 @@
 package com.book.controller;
 
 import com.book.config.interceptor.Auth;
-import com.book.config.security.jwt.JwtResponse;
-import com.book.config.security.jwt.JwtTokenProvider;
-import com.book.config.security.jwt.LoginUser;
-import com.book.config.security.jwt.RefreshTokenReq;
-import com.book.domain.user.dto.request.LoginDto;
-import com.book.domain.user.dto.request.UserCreateDto;
-import com.book.service.UserService;
+import com.book.utils.jwt.JwtResponse;
+import com.book.utils.jwt.JwtTokenProvider;
+import com.book.utils.jwt.LoginUser;
+import com.book.utils.jwt.RefreshTokenReq;
+import com.book.service.user.dto.request.LoginDto;
+import com.book.service.user.dto.request.UserCreateDto;
+import com.book.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

@@ -1,9 +1,9 @@
 package com.book.controller;
 
-import com.book.domain.user.dto.request.LoginDto;
+import com.book.service.user.dto.request.LoginDto;
 import com.book.domain.user.User;
-import com.book.domain.user.dto.request.UserCreateDto;
-import com.book.service.UserService;
+import com.book.service.user.dto.request.UserCreateDto;
+import com.book.service.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

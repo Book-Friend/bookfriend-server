@@ -2,8 +2,10 @@ package com.book.service;
 
 import com.book.domain.follow.Follow;
 import com.book.domain.user.User;
-import com.book.domain.user.dto.request.UserCreateDto;
+import com.book.service.user.dto.request.UserCreateDto;
 import com.book.repository.user.FollowRepository;
+import com.book.service.follow.FollowService;
+import com.book.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,7 @@ class FollowServiceTest {
     @Test
     @DisplayName("팔로우")
     void follow() {
-        Follow follow = followService.follow(user2.getId(), user1);
+        Follow follow = followService.follow(user2, user1);
         assertEquals(user1.getFollower().contains(follow), true);
         assertEquals(user2.getFollowing().contains(follow), true);
     }
@@ -48,16 +50,16 @@ class FollowServiceTest {
     @DisplayName("팔로우 중복")
     void duplicateFollow() {
 
-        followService.follow(user1.getId(), user2);
-        assertThrows(RuntimeException.class, () -> followService.follow(user1.getId(), user2));
+        followService.follow(user1, user2);
+        assertThrows(RuntimeException.class, () -> followService.follow(user1, user2));
     }
 
     @Test
     @DisplayName("팔로우 취소")
     void delete() {
 
-        Follow follow = followService.follow(user1.getId(), user2);
-        followService.followCancel(user1.getId(), user2);
+        Follow follow = followService.follow(user1, user2);
+        followService.followCancel(user1, user2);
         assertEquals(true, followRepository.findById(follow.getId()).isEmpty());
     }
 }

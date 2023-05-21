@@ -5,8 +5,8 @@ import com.book.domain.MyBook.MyBook;
 import com.book.domain.follow.Follow;
 import com.book.domain.recommend.Like;
 import com.book.domain.recommend.Recommend;
-import com.book.domain.user.dto.request.UserUpdateDto;
-import com.book.domain.user.dto.response.ProfileResDto;
+import com.book.service.user.dto.request.UserUpdateDto;
+import com.book.service.user.dto.response.ProfileResDto;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 

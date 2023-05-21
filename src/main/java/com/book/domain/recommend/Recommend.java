@@ -1,8 +1,8 @@
 package com.book.domain.recommend;
 
 import com.book.domain.book.Book;
-import com.book.domain.recommend.dto.response.RecommendResDto;
-import com.book.domain.recommend.dto.response.RecommendSearchDto;
+import com.book.service.recommend.dto.response.RecommendResDto;
+import com.book.service.recommend.dto.response.RecommendSearchDto;
 import com.book.domain.tag.RecommendTag;
 import com.book.domain.user.User;
 import lombok.AllArgsConstructor;

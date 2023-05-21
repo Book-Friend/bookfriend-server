@@ -1,9 +1,10 @@
 package com.book.service;
 
 import com.book.domain.user.User;
-import com.book.domain.user.dto.request.UserCreateDto;
+import com.book.service.user.dto.request.UserCreateDto;
 import com.book.exception.user.DuplicateEmailException;
 import com.book.exception.user.UserNotFoundException;
+import com.book.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,7 +44,7 @@ class UserServiceTest {
         User user = userService.signUp(createDto);
 
         Long id = user.getId();
-        userService.deleteUser(user);
+        userService.deleteUser(id);
         assertThrows(UserNotFoundException.class, () -> userService.findUser(id));
     }
 

@@ -1,6 +1,6 @@
 package com.book.config.interceptor;
 
-import com.book.config.security.jwt.JwtTokenProvider;
+import com.book.utils.jwt.JwtTokenProvider;
 import com.book.exception.book.UnAuthorizedAccess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

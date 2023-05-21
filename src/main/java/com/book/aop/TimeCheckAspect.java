@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TimeCheckAspect {
 
-    @Around("execution(* com.book.controller..*(..))")
+    @Around("execution(* com.book.service..*(..))")
     public Object checkTime(ProceedingJoinPoint joinPoint) {
         long startTime = System.currentTimeMillis();
         try {

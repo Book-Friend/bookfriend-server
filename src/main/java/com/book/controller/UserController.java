@@ -1,12 +1,12 @@
 package com.book.controller;
 
 import com.book.config.interceptor.Auth;
-import com.book.config.security.jwt.LoginUser;
+import com.book.utils.jwt.LoginUser;
 import com.book.domain.user.User;
-import com.book.domain.user.dto.request.PasswordChangeDto;
-import com.book.domain.user.dto.request.UserUpdateDto;
-import com.book.service.ImageService;
-import com.book.service.UserService;
+import com.book.service.user.dto.request.PasswordChangeDto;
+import com.book.service.user.dto.request.UserUpdateDto;
+import com.book.utils.ImageService;
+import com.book.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

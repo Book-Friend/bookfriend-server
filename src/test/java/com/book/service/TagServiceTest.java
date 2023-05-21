@@ -1,10 +1,13 @@
 package com.book.service;
 
 import com.book.domain.MyBook.MyBook;
-import com.book.domain.MyBook.dto.request.MyBookCreateDto;
-import com.book.domain.recommend.dto.response.RecommendResDto;
+import com.book.service.mybook.dto.request.MyBookCreateDto;
+import com.book.service.recommend.dto.response.RecommendResDto;
 import com.book.domain.user.User;
-import com.book.domain.user.dto.request.UserCreateDto;
+import com.book.service.user.dto.request.UserCreateDto;
+import com.book.service.mybook.MyBookService;
+import com.book.service.tag.TagService;
+import com.book.service.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -47,7 +50,7 @@ class TagServiceTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
                 .build();
-        myBook = myBookService.createMyBook(user, createDto);
+        myBook = myBookService.createMyBook(user.getId(), createDto);
         tags.add("tag3");
         MyBookCreateDto createDto2 = MyBookCreateDto.builder()
                 .author("testAuthor1")
@@ -61,7 +64,7 @@ class TagServiceTest {
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
                 .build();
-        myBookService.createMyBook(user, createDto2);
+        myBookService.createMyBook(user.getId(), createDto2);
     }
 
 

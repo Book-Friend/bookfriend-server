@@ -1,9 +1,6 @@
 package com.book.repository.recommend;
 
-import com.book.domain.recommend.QRecommend;
-import com.book.domain.recommend.Recommend;
-import com.book.domain.recommend.dto.response.RecommendResDto;
-import com.book.domain.recommend.dto.response.RecommendSearchDto;
+import com.book.service.recommend.dto.response.RecommendSearchDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +12,6 @@ import java.util.List;
 
 import static com.book.domain.book.QBook.book;
 import static com.book.domain.recommend.QRecommend.recommend;
-import static com.book.domain.tag.QTag.tag;
 import static com.book.domain.user.QUser.user;
 
 @RequiredArgsConstructor

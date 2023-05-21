@@ -1,7 +1,7 @@
 package com.book.controller;
 
-import com.book.domain.book.dto.response.BookResDto;
-import com.book.service.BookService;
+import com.book.service.book.dto.response.BookResDto;
+import com.book.service.book.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

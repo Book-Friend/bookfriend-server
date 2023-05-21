@@ -1,15 +1,14 @@
 package com.book.controller;
 
 import com.book.config.interceptor.Auth;
-import com.book.config.security.jwt.LoginUser;
+import com.book.utils.jwt.LoginUser;
 import com.book.domain.alarm.Notice;
-import com.book.domain.alarm.dto.response.NoticeResDto;
+import com.book.service.notice.dto.response.NoticeResDto;
 import com.book.domain.user.User;
-import com.book.service.NoticeService;
-import com.book.service.UserService;
+import com.book.service.notice.NoticeService;
+import com.book.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;

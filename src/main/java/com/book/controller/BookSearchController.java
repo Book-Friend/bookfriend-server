@@ -1,14 +1,12 @@
 package com.book.controller;
 
-import com.book.domain.book.dto.response.SearchDto;
-import com.book.service.BookSearchService;
-import com.book.service.BookService;
+import com.book.service.book.dto.response.SearchDto;
+import com.book.service.book.BookSearchService;
+import com.book.service.book.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController

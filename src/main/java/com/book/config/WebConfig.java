@@ -1,7 +1,7 @@
 package com.book.config;
 
 import com.book.config.interceptor.AuthInterceptor;
-import com.book.config.security.jwt.LoginUserResolver;
+import com.book.utils.jwt.LoginUserResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
