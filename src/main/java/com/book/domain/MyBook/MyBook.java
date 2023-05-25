@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -100,6 +101,9 @@ public class MyBook {
                 .title(this.book.getTitle())
                 .image(this.book.getImage())
                 .star(this.star)
+                .startDate(this.startDate)//.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .endDate(this.endDate)//.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))
+                .comment(this.comment)
                 .build();
     }
 }

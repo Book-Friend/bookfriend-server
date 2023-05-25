@@ -13,7 +13,11 @@ import com.book.exception.book.DuplicateBookException;
 import com.book.repository.mybook.MyBookRepository;
 import com.book.repository.user.UserRepository;
 import com.book.service.book.BookService;
+import com.book.service.mybook.dto.response.MyBookResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,8 +55,8 @@ public class MyBookService {
     }
 
     @Transactional(readOnly = true)
-    public List<MyBook> getMyBookList(Long userId){
-        return myBookRepository.findAllByUserId(userId);
+    public Slice<MyBookResDto> getMyBookList(Long userId, Pageable pageable){
+        return myBookRepository.findMyBookList(userId, pageable);
     }
 
     @Transactional

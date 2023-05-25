@@ -8,6 +8,10 @@ import com.book.service.mybook.dto.request.MyBookUpdateDto;
 import com.book.service.mybook.dto.response.MyBookResDto;
 import com.book.service.mybook.MyBookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mybook")
+@RequestMapping("/api/mybook")
 public class MyBookController {
 
     private final MyBookService myBookService;
@@ -29,18 +33,16 @@ public class MyBookController {
         return ResponseEntity.ok().build();
     }
 
-    @Auth
     @GetMapping("/detail")
-    public ResponseEntity<MyBookResDto> getMyBook(@LoginUser Long userId,
-                                                  @RequestParam(name = "mybookid") Long id){
-        myBookService.checkAccessPermission(id,userId);
+    public ResponseEntity<MyBookResDto> getMyBook(@RequestParam(name = "mybookid") Long id){
+        //myBookService.checkAccessPermission(id,userId);
         return ResponseEntity.ok(myBookService.getMyBook(id).toResDto());
     }
 
-    @GetMapping("/shelf")
-    public ResponseEntity<List<MyBookResDto>> myBookList(@RequestParam(name = "userid") Long userId){
-        List<MyBookResDto> userBookList = myBookService.getMyBookList(userId).stream().map(MyBook::toResDto)
-                .collect(Collectors.toList());
+    @GetMapping("/shelf/{userid}")
+    public ResponseEntity<Slice<MyBookResDto>> myBookList(@PathVariable(name = "userid") Long userId,
+                                                         @PageableDefault Pageable pageable){
+        Slice<MyBookResDto> userBookList = myBookService.getMyBookList(userId, pageable);
         return ResponseEntity.ok(userBookList);
     }
 
@@ -59,7 +61,7 @@ public class MyBookController {
     @Auth
     @DeleteMapping("/delete")
     public ResponseEntity<Void> delete(@LoginUser Long userId,
-                                       @RequestParam Long id){
+                                       @RequestParam("id") Long id){
 
         myBookService.checkAccessPermission(id, userId);
         myBookService.deleteMyBooks(id);
